@@ -1,0 +1,40 @@
+﻿@model IEnumerable<WebApplication1.Models.Category>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Category Index</h2>
+
+@*<p>
+    @Html.ActionLink("Create New", "Create")
+</p>*@
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CategoryName)            
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>產品清單</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CategoryName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @*@Html.ActionLink("Edit", "Edit", new { id=item.CategoryID }) |*@
+            @Html.ActionLink("Details", "Index","Product", new { CategoryID=item.CategoryID }, null) 
+            @*@Html.ActionLink("Delete", "Delete", new { id=item.CategoryID })*@
+        </td>
+    </tr>
+}
+
+</table>

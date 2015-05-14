@@ -1,0 +1,96 @@
+﻿@model IList<WebApplication1.Models.ViewModel.ProductDetail>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Shopping Index</h2>
+
+
+
+<table class="table">
+    @{
+        
+        <tr>
+            <td>產品名稱</td>
+            <td>數量</td>
+            <td>價錢</td>
+            <td></td>
+        </tr>
+        foreach (var item in Model)
+        {
+            <tr>
+
+                <td>@item.ProductName</td>
+                <td>@item.Quantity</td>
+                <td>@item.Price</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", "Shopping", new { ProductID = item.ProductID, Quantity = item.Quantity, Price = item.Price }, null) | 
+                    @Html.ActionLink("Delete", "Delete", "Shopping", new { ProductID = item.ProductID, Quantity = item.Quantity, Price = item.Price }, null)
+                </td>
+            </tr>
+        }
+    }
+</table>
+
+@{
+    if (Request.IsAuthenticated)
+    {
+        using (Html.BeginForm("Checkin", "Shopping", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <input type="submit" value="購物車結帳" />
+        }
+        
+        <hr />
+        <input id="btnReload" type="button" value="取得歷史消費資料" />
+        <hr />
+    <div style="width:100%;margin:0 auto;overflow-y:scroll;">
+        <table id="tableHis" class="table"></table>
+    </div>
+
+
+        <script>
+
+            $(function () {
+
+
+                var Reload = function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("GetShoppingHisory", "Shopping")",
+                        data: "",
+                        dataType: "json",
+                        success: function (response) {
+                            if (response.IsSuccess === true) {
+                                var strhtml = "";
+                                var ogj = JSON.parse(response.JsonString);
+
+                                strhtml += "<tr> <th>訂單編號</th><th>付款狀態</th><th>總共金額</th><th>購物明細</th></tr>";
+                                for (var i = 0, max = ogj.length; i < max ; i++) {
+
+                                    strhtml += "<tr><th>" + ogj[i].ListID + "</th><th>" + ogj[i].Status + "</th><th>" + ogj[i].Total + "</th>";
+                                    strhtml += "<th><table><tr> <td>產品名稱</td> <td>數量</td>  <td>單價</td>   </tr>";
+                                    for (var j = 0, max2 = ogj[i].List.length ; j < max2; j++) {
+                                        strhtml += "<tr> <td>" + ogj[i].List[j].ProductName + "</td> <td>" + ogj[i].List[j].Quantity + "</td>  <td>" + ogj[i].List[j].Price + "</td> </tr>";
+                                    }
+                                    strhtml += "</table></th>";
+                                }
+                                strhtml += "</tr>";
+                                $("#tableHis").html(strhtml);
+                            }
+                            console.log(response);
+                        }
+                    });
+                };
+
+                $("#btnReload").click(function () {
+                    Reload();
+                });
+            });
+
+        </script>
+    }
+}
+

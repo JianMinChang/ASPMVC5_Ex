@@ -1,0 +1,104 @@
+﻿@model WebApplication1.Models.Product
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <h4>Product Details</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CategoryID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CategoryID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProductName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            <label>
+                選擇加入購物車數量:
+            </label>
+        </dt>
+        <dd>
+            <select id="ddlQuantity">
+                @{
+                    for (int i = 1; i < Model.Quantity + 1; i++)
+                    {
+                        <option value="@i">@i</option>
+                    }
+                }
+            </select>
+            <input type="button" id="btnSumitShopping" data-productid="@Model.ProductID" data-price="@Model.Price" value="加入購物車" />
+
+        </dd>
+    </dl>
+
+</div>
+<p>
+    @*@Html.ActionLink("Edit", "Edit", new { id = Model.ProductID }) |*@
+    @Html.ActionLink("Back to List", "Index", new { CategoryID = Model.CategoryID })
+</p>
+<script>
+
+    $(function () {
+
+       
+
+        $("#btnSumitShopping").click(function () {
+
+            var quantity = $("#ddlQuantity")[0].value;
+            var ProductID = $("#btnSumitShopping").attr("data-productid");
+            var Price = $("#btnSumitShopping").attr("data-price");
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Create","Shopping")",
+                data: { ProductID: ProductID, Quantity: quantity, Price: Price },
+                dataType: "json",
+                success: function (response) {
+                    //console.log(response);
+                    if (response.IsSuccess==true) {
+                        alert("新增至購物車成功");
+                    }
+                },
+                
+            });
+
+        });
+    });
+</script>
