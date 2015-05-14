@@ -27,3 +27,5 @@ Category清單查詢，Table右側有link 可以做產品的列表呈現。
 在使用者登入的時候 才會有結帳按鈕，還有查詢歷史紀錄的按鈕。
 查詢歷史按鈕是用 jQuery 使用AJAJ 去做DHTML。
 
+4.分層架構
+有分成Repository 跟 Service 。我沒有直接用library做分層，我用Folder做區隔。
