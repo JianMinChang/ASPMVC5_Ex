@@ -1,0 +1,15 @@
+IDE  : Visual Studio 2013
+DB   : LocalDB
+ORM  : Entity Framework 6
+
+
+
+
+
+
+
+
+
+
+
+
